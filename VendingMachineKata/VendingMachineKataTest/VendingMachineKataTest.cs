@@ -15,10 +15,23 @@ namespace VendingMachineKataTest
          VendingMachine vendingMachine;
          private static string InsertCoinMessage = "INSERT COIN";
 
+        enum Coin 
+        {
+            Penny =1, 
+            Nickel = 5,
+            Dime = 10,
+            Quarter = 25
+        } ;
+
+        int penny = (int)Coin.Penny;
+        int nickel = (int)Coin.Nickel;
+        int dime = (int)Coin.Dime;
+        int quarter = (int)Coin.Quarter;
+
         [SetUp]
         public void TestSetup()
         {
-
+            
         }
 
         [Test]
@@ -34,35 +47,35 @@ namespace VendingMachineKataTest
         public void WhenANickleIsInsertedDisplayDisplaysFiveCents()
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.InsertCoin(.05f);
+            vendingMachine.InsertCoin(nickel);
             string result = vendingMachine.Display();
 
-            Assert.AreEqual("0.05", result);
+            Assert.AreEqual("5", result);
         }
 
         [Test]
         public void WhenAPennyIsInsertedDisplayDisplaysInvalidCoin()
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.InsertCoin(.01f);
+            vendingMachine.InsertCoin(penny);
             string result = vendingMachine.Display();
-            float returnAmount = vendingMachine.CoinReturn();
+            int returnAmount = vendingMachine.CoinReturn();
 
             Assert.AreEqual(InsertCoinMessage, result);
-            Assert.AreEqual(returnAmount, 0.01f);
+            Assert.AreEqual(returnAmount, 1);
         }
 
         [Test]
         public void InsertPennyAndNickekDisplayShouldFiveCentsAndReturnDisplayOneCent()
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.InsertCoin(.01f);
-            vendingMachine.InsertCoin(.05f);
+            vendingMachine.InsertCoin(penny);
+            vendingMachine.InsertCoin(nickel);
             string result = vendingMachine.Display();
-            float returnAmount = vendingMachine.CoinReturn();
+            int returnAmount = vendingMachine.CoinReturn();
 
-            Assert.AreEqual("0.05", result);
-            Assert.AreEqual(returnAmount, 0.01f);
+            Assert.AreEqual("5", result);
+            Assert.AreEqual(returnAmount, 1);
         }
 
         [Test]
@@ -73,19 +86,129 @@ namespace VendingMachineKataTest
             
             string result = vendingMachine.Display();
 
-            Assert.AreEqual("1", result);
+            Assert.AreEqual("100", result);
         }
 
         [Test]
         public void InsertAQuarterSelectColaCheckDisplayTwiceDisplayShouldReady25Cents()
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.InsertCoin(.25f);
+            vendingMachine.InsertCoin(quarter);
             vendingMachine.ColaButton();
             string result1 = vendingMachine.Display();
             string result2 = vendingMachine.Display();
 
-            Assert.AreEqual("0.25",result2);
+            Assert.AreEqual("25",result2);
+        }
+
+        [Test]
+        public void InsertOneDollarSelectColaDisplayShouldDesplayThankYou()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.ColaButton();
+            string result = vendingMachine.Display();
+
+            Assert.AreEqual("THANK YOU", result);
+        }
+
+        [Test]
+        public void InsertOneDollarSelectColaDisplayTwiceShouldDesplayInsertCoin()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.ColaButton();
+            string result = vendingMachine.Display();
+            result = vendingMachine.Display();
+
+            Assert.AreEqual("INSERT COIN", result);
+        }
+
+        [Test]
+        public void SelectChipsButtonDisplayFiftyCents()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.ChipsButton();
+            string result = vendingMachine.Display();
+
+            Assert.AreEqual(("50"), result);
+        }
+
+        [Test]
+        public void InsertAQuarterSelectChipsCheckDisplayTwiceDisplayShouldReady25Cents()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.ChipsButton();
+            string result1 = vendingMachine.Display();
+            string result2 = vendingMachine.Display();
+
+            Assert.AreEqual("25", result2);
+        }
+
+        [Test]
+        public void SelectCandyButtonDisplaySixtyFiveCents()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.CandyButton();
+            string result = vendingMachine.Display();
+
+            Assert.AreEqual(("65"), result);
+        }
+
+        [Test]
+        public void InsertOneDollarTwentyFiveSelectColaCoinReturnShouldContain25Cents()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.ColaButton();
+            int result = vendingMachine.CoinReturn();
+
+            Assert.AreEqual(25, result);
+        }
+
+        [Test]
+        public void InsertTwoPenniesCheckCoinReturn()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(penny);
+            vendingMachine.InsertCoin(penny);
+            int result = vendingMachine.CoinReturn();
+
+            Assert.AreEqual(2, result);
+        }
+
+        [Test]
+        public void InsertCoinsPushReturnCoins()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.CoinReturnButton();
+            int result = vendingMachine.CoinReturn();
+
+            Assert.AreEqual(result, 25);
+        }
+
+        [Test]
+        public void InsertFiftyCentsCoinsPushReturnCoins()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.CoinReturnButton();
+            int result = vendingMachine.CoinReturn();
+
+            Assert.AreEqual(result, 50);
         }
     }
 }

@@ -11,10 +11,10 @@ namespace VendingMachineKata
 
     public class VendingMachine
     {
-        float balance = 0;
-        private float productPrice = 0;
+        int balance = 0;
+        private int productPrice = 0;
         private int numberOfDisplayChecks = 0;
-        private float change = 0;
+        private int change = 0;
         public string Display()
         {
             numberOfDisplayChecks++; 
@@ -23,16 +23,21 @@ namespace VendingMachineKata
             {
                 return productPrice.ToString(CultureInfo.InvariantCulture);
             }
+            else if (productPrice != 0 && balance >= productPrice)
+            {
+                balance = 0;
+                return "THANK YOU";
+            }
             else
             {
-                return (balance.Equals(0.0f)) ? "INSERT COIN" : balance.ToString(CultureInfo.InvariantCulture);  
+                return (balance.Equals(0)) ? "INSERT COIN" : balance.ToString(CultureInfo.InvariantCulture);  
             }            
         }
 
-        public void InsertCoin(float coin)
+        public void InsertCoin(int coin)
         {
-            if (coin.Equals(.01f))
-                change = coin;
+            if (coin.Equals(1))
+                change += coin;
             else
             {
                 balance += coin;
@@ -40,14 +45,32 @@ namespace VendingMachineKata
             
         }
 
-        public float CoinReturn()
+        public int CoinReturn()
         {
+            if (productPrice != 0 && balance > productPrice)
+                change = balance - productPrice;
+
             return change;
         }
 
         public void ColaButton()
         {
-            productPrice = 1.00f;
+            productPrice = 100;
+        }
+
+        public void ChipsButton()
+        {
+            productPrice = 50;
+        }
+
+        public void CandyButton()
+        {
+            productPrice = 65;
+        }
+
+        public void CoinReturnButton()
+        {
+            change = balance;
         }
     }
 }
