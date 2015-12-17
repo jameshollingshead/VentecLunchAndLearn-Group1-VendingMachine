@@ -15,9 +15,46 @@ namespace VendingMachineKata
         private int productPrice = 0;
         private int numberOfDisplayChecks = 0;
         private int change = 0;
+        private int chipsQuantity = 0;
+        private bool isChipsButton = false;
+        private bool iscolasButton =false;
+        private int colaQuantity = 0;
+        private int candyQuantity = 0;
+        private bool isCandyButton = false;
+        private int amountofchangeinmachine = 0;
+
+        public VendingMachine(int numChips = 10,int numcola =10, int numCandy=10, int Amountofchangeinmachine = 100)
+        {
+            chipsQuantity = numChips;
+            colaQuantity = numcola;
+            candyQuantity = numCandy;
+            amountofchangeinmachine = Amountofchangeinmachine;
+        }
+
         public string Display()
         {
-            numberOfDisplayChecks++; 
+            numberOfDisplayChecks++;
+
+            if (isChipsButton && chipsQuantity == 0)
+            {
+                isChipsButton = false;
+                return "SOLD OUT";
+            }
+            if (iscolasButton && colaQuantity == 0)
+            {
+                iscolasButton = false;
+                return "SOLD OUT";
+            }
+
+            if (isCandyButton && candyQuantity == 0)
+            {
+                isCandyButton = false;
+                return "SOLD OUT";
+            }
+            if (amountofchangeinmachine == 0)
+            {
+                return "EXACT CHANGE ONLY";
+            }
 
             if ((numberOfDisplayChecks == 1) && (productPrice > balance))
             {
@@ -30,8 +67,11 @@ namespace VendingMachineKata
             }
             else
             {
-                return (balance.Equals(0)) ? "INSERT COIN" : balance.ToString(CultureInfo.InvariantCulture);  
-            }            
+                return (balance.Equals(0)) ? "INSERT COIN" : balance.ToString(CultureInfo.InvariantCulture);
+            }
+
+
+
         }
 
         public void InsertCoin(int coin)
@@ -42,7 +82,7 @@ namespace VendingMachineKata
             {
                 balance += coin;
             }
-            
+
         }
 
         public int CoinReturn()
@@ -55,16 +95,19 @@ namespace VendingMachineKata
 
         public void ColaButton()
         {
+            iscolasButton = true;
             productPrice = 100;
         }
 
         public void ChipsButton()
         {
+            isChipsButton = true;
             productPrice = 50;
         }
 
         public void CandyButton()
         {
+            isCandyButton = true;
             productPrice = 65;
         }
 
