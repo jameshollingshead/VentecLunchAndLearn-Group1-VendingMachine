@@ -273,16 +273,111 @@ namespace VendingMachineKataTest
         }
 
         [Test]
-        public void IfMachineHasNoChangeBuyItemWithExactChangeDisplayInsertCoins()
+        public void IfMachineHasNoChangeBuySodaWithExactChangeDisplayInsertCoins()
         {
             vendingMachine = new VendingMachine(1, 1, 1, 0);
-            string expectedResult = "INSERT COINS";
+            string expectedResult = "INSERT COIN";
             vendingMachine.InsertCoin(quarter);
             vendingMachine.InsertCoin(quarter);
             vendingMachine.InsertCoin(quarter);
             vendingMachine.InsertCoin(quarter);
             vendingMachine.ColaButton();
 
+            string result = vendingMachine.Display();
+            result = vendingMachine.Display();
+            result = vendingMachine.Display();
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void IfMachineHasNoChangeBuyChipsWithExactChangeDisplayInsertCoins()
+        {
+            vendingMachine = new VendingMachine(1, 1, 1, 0);
+            string expectedResult = "INSERT COIN";
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.ChipsButton();
+
+            string result = vendingMachine.Display();
+            result = vendingMachine.Display();
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void IfMachineHasNoChangeBuyCandyWithExactChangeDisplayInsertCoins()
+        {
+            vendingMachine = new VendingMachine(1, 1, 1, 0);
+            string expectedResult = "INSERT COIN";
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(dime);
+            vendingMachine.InsertCoin(nickel);
+
+            vendingMachine.CandyButton();
+
+            string result = vendingMachine.Display();
+            result = vendingMachine.Display();
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void IfMachineHasNoChangeBuyCandyWith75CentsDisplayInsertCoinsAndGetCandyAndNoChangeReturned()
+        {
+            vendingMachine = new VendingMachine(1, 1, 1, 0);
+            string expectedResult = "INSERT COIN";
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+             
+
+            vendingMachine.CandyButton();
+
+            string result = vendingMachine.Display();
+            result = vendingMachine.Display();
+            Assert.AreEqual(expectedResult, result);
+
+            var coinreturn =vendingMachine.CoinReturn();
+            var expectedcoinreturn = 0;
+            Assert.AreEqual(expectedcoinreturn, coinreturn);
+        }
+
+        [Test]
+        public void Insert75CentsAndBuyChipsCoinReturnShouldContain25Cents()
+        {
+            vendingMachine = new VendingMachine();
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+
+            vendingMachine.ChipsButton();
+
+            int result = vendingMachine.CoinReturn();
+            
+            Assert.AreEqual(25,result);
+        }
+
+        [Test]
+        public void MachineHasOneColaBuyingTwoColasDisplaysSoldOut()
+        {
+            vendingMachine = new VendingMachine(1,1,1,25);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+
+            vendingMachine.ColaButton();
+
+            Assert.AreEqual("THANK YOU", vendingMachine.Display());
+            Assert.AreEqual("INSERT COIN", vendingMachine.Display());
+
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+            vendingMachine.InsertCoin(quarter);
+
+            vendingMachine.ColaButton();
+            string expectedResult = "SOLD OUT";
             string result = vendingMachine.Display();
 
             Assert.AreEqual(expectedResult, result);

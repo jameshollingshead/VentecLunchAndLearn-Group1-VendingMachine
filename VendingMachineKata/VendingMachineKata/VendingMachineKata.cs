@@ -18,6 +18,7 @@ namespace VendingMachineKata
         private int chipsQuantity = 0;
         private bool isChipsButton = false;
         private bool iscolasButton =false;
+        private bool dispensing = false;
         private int colaQuantity = 0;
         private int candyQuantity = 0;
         private bool isCandyButton = false;
@@ -40,7 +41,7 @@ namespace VendingMachineKata
                 isChipsButton = false;
                 return "SOLD OUT";
             }
-            if (iscolasButton && colaQuantity == 0)
+            if (iscolasButton && colaQuantity == 0 && dispensing == false)
             {
                 iscolasButton = false;
                 return "SOLD OUT";
@@ -63,6 +64,7 @@ namespace VendingMachineKata
             else if (productPrice != 0 && balance >= productPrice)
             {
                 balance = 0;
+                dispensing = false;
                 return "THANK YOU";
             }
             else
@@ -97,23 +99,37 @@ namespace VendingMachineKata
         {
             iscolasButton = true;
             productPrice = 100;
+
+            if (colaQuantity > 0)
+            {
+                UpdateAmountofChange();
+                colaQuantity = colaQuantity - 1;
+                dispensing = true;
+            }
         }
 
         public void ChipsButton()
         {
             isChipsButton = true;
             productPrice = 50;
+            UpdateAmountofChange();
         }
 
         public void CandyButton()
         {
             isCandyButton = true;
             productPrice = 65;
+            UpdateAmountofChange();
         }
 
         public void CoinReturnButton()
         {
             change = balance;
+        }
+
+        private void UpdateAmountofChange()
+        {
+            amountofchangeinmachine += balance;
         }
     }
 }
